@@ -1,0 +1,32 @@
+sequenceDiagram
+    participant user
+    participant server
+
+    user-->>server: POST text/html https://studies.cs.helsinki.fi/exampleapp/new_note
+    activate server
+    server-->>user: redirect user https://studies.cs.helsinki.fi/exampleapp/new_note
+    deactivate server
+
+    note right of user: server process POST data
+
+    user->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server-->>user: HTML document
+    deactivate server
+
+    user->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>user: the css file
+    deactivate server
+
+    user->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate server
+    server-->>user: the JavaScript file
+    deactivate server
+
+    user->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>user: [{ "content": "hihi", "date": "2023-7-7" }, ... ]
+    deactivate server
+
+    note right of user: browser renders new data that now contains also data submitted by user

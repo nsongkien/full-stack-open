@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    note right of browser: event triggers the function to create a new note and add it to the collection of notes
+    note right of browser: browser triggers the rerender function
+    note right of browser: browser triggers the sendToServer function
+    browser-->>server: POST json https://studies.cs.helsinki.fi/exampleapp/new_note
+    
