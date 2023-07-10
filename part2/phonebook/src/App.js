@@ -40,7 +40,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      
+      console.log('hello');
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       
       <h3>Add a new</h3>
