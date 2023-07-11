@@ -3,6 +3,8 @@ import axios from 'axios'
 import PersonForm from './components/PersonForm'
 import PersonsDisplay from './components/PersonsDisplay'
 import Filter from './components/Filter'
+import personsServices from './services/persons'
+
 
 const App = () => {
   const [persons,setPersons]=useState([])
@@ -21,22 +23,46 @@ const App = () => {
   const handleFilterChange = (event) => setFilter(event.target.value.toLowerCase());
   const handleNameChange = (event) => setNewName(event.target.value)
   const handlePhoneChange = (event) => setNewPhone(event.target.value)
-
+  const handleDelete=(id)=>{
+    setPersons(persons.filter(person=>person.id!==id))
+  }
   const handleAddClick = (event) => {
     event.preventDefault()
-    if (persons.find(person=>newName===person.name))
-      return alert(`${newName} is already added to phonebook`)
-    else if (persons.find(person=>newPhone===person.phone))
-      return alert(`${newPhone} is somebody else's phone number`)
+    if (persons.find(person=>newName===person.name)){
+      const foundPerson=persons.find(person=>newName===person.name)
+      if (window.confirm(`${foundPerson.name} is already added to phonebook, replace the old number with a new one?`)){
+        const newPersonObject = {
+          ...foundPerson,
+          phone: newPhone,
+        }
+        return (
+          personsServices
+            .update(foundPerson.id, newPersonObject)
+            .then(() => {
+              setPersons(persons.map((person) =>
+                person.id === newPersonObject.id ? newPersonObject : person
+              ))
+              setNewName('')
+              setNewPhone('')
+            })
+        )    
+      } 
+      else return
+    }
     
     const newPersonObject = {
       name: newName,
       phone: newPhone,
-      id: persons.length+1
     }
-    setPersons(persons.concat(newPersonObject))
-    setNewName('')
-    setNewPhone('')
+    personsServices
+      .create(newPersonObject)
+      .then(response=>{
+        setPersons(persons.concat(response))
+        setNewName('')
+        setNewPhone('')
+      })
+
+    
   }
   
 
@@ -57,7 +83,10 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <PersonsDisplay persons={persons} filter={filter}/>
+      <PersonsDisplay 
+        persons={persons} 
+        filter={filter}
+        handleDelete={handleDelete}/>
     </div>
   )
 }
