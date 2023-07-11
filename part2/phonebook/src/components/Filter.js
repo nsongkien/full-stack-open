@@ -6,4 +6,4 @@ const Filter = ({filter,handleFilterChange})=>
       
   </p>
 
-  export default Filter
+export default Filter

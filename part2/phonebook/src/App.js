@@ -4,13 +4,14 @@ import PersonForm from './components/PersonForm'
 import PersonsDisplay from './components/PersonsDisplay'
 import Filter from './components/Filter'
 import personsServices from './services/persons'
-
-
+import Notification from './components/notification'
 const App = () => {
   const [persons,setPersons]=useState([])
   const [newName, setNewName] = useState('')
   const [newPhone,setNewPhone] =useState('')
   const [filter,setFilter]=useState('')
+  const [successMessage,setSuccessMessage]=useState('')
+  const [messageId,setMessageId] = useState(0)
 
   useEffect(()=>{
     axios
@@ -24,7 +25,13 @@ const App = () => {
   const handleNameChange = (event) => setNewName(event.target.value)
   const handlePhoneChange = (event) => setNewPhone(event.target.value)
   const handleDelete=(id)=>{
-    setPersons(persons.filter(person=>person.id!==id))
+    const removedPerson=persons.filter(person=>person.id!==id)
+    const foundPerson=persons.find(person=>person.id===id)
+
+    console.log(foundPerson)
+    setSuccessMessage(`Deleted ${foundPerson.name}`)
+    setPersons(removedPerson)
+    setMessageId(messageId+1)
   }
   const handleAddClick = (event) => {
     event.preventDefault()
@@ -44,6 +51,8 @@ const App = () => {
               ))
               setNewName('')
               setNewPhone('')
+              setSuccessMessage(`Changed ${foundPerson.name} phone number`)
+              setMessageId(messageId+1)
             })
         )    
       } 
@@ -60,14 +69,20 @@ const App = () => {
         setPersons(persons.concat(response))
         setNewName('')
         setNewPhone('')
+        setSuccessMessage(`Added ${newPersonObject.name} phone number`)
+        setMessageId(messageId+1)
       })
-
+    
     
   }
   
 
   return (
     <div>
+      <Notification 
+        message={successMessage}
+        messageId={messageId}
+      />
       <h2>Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       
@@ -86,7 +101,9 @@ const App = () => {
       <PersonsDisplay 
         persons={persons} 
         filter={filter}
-        handleDelete={handleDelete}/>
+        handleDelete={handleDelete}
+      />
+
     </div>
   )
 }
