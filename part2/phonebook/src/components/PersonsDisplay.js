@@ -1,6 +1,6 @@
 import personsServices from "../services/persons"
 
-const PersonsDisplay = ({persons,filter,handleDelete}) => {
+const PersonsDisplay = ({persons,filter,handleDelete,handleDeleteError}) => {
   return (
     <>
       {persons
@@ -12,9 +12,14 @@ const PersonsDisplay = ({persons,filter,handleDelete}) => {
               if (window.confirm(`Delete ${person.name}?`))
               {
                 personsServices.erase(person.id)
-                handleDelete(person.id)
+                .then(()=>{
+                  handleDelete(person.id)
+                })
+                .catch(error=>{
+                  handleDeleteError(error.config.url)
+                })
               }
-          }}>delete</button>
+         }}>delete</button>
         </div>
      ))}
     </>

@@ -5,6 +5,8 @@ import PersonsDisplay from './components/PersonsDisplay'
 import Filter from './components/Filter'
 import personsServices from './services/persons'
 import Notification from './components/notification'
+import Faulty from './components/faulty'
+
 const App = () => {
   const [persons,setPersons]=useState([])
   const [newName, setNewName] = useState('')
@@ -12,7 +14,7 @@ const App = () => {
   const [filter,setFilter]=useState('')
   const [successMessage,setSuccessMessage]=useState('')
   const [messageId,setMessageId] = useState(0)
-
+  const [faultyMessage,setFaultyMessagae]=useState('')
   useEffect(()=>{
     axios
       .get('http://localhost:3001/persons')
@@ -21,14 +23,19 @@ const App = () => {
       })
   },[])
 
-  const handleFilterChange = (event) => setFilter(event.target.value.toLowerCase());
+  const handleFilterChange = (event) => setFilter(event.target.value.toLowerCase())   
   const handleNameChange = (event) => setNewName(event.target.value)
   const handlePhoneChange = (event) => setNewPhone(event.target.value)
+  const handleDeleteError = (errorUrl)=>{
+    console.log([errorUrl])
+    const deletedPerson=persons.find(person=>person.id==errorUrl.slice(errorUrl.indexOf('persons/')+'persons/'.length))
+    console.log(deletedPerson)
+    setFaultyMessagae(`Information for ${deletedPerson.name} was already deleted`)
+    setPersons(persons => persons.map((person)=>person).filter((person) => person.name !== deletedPerson.name))
+  }
   const handleDelete=(id)=>{
     const removedPerson=persons.filter(person=>person.id!==id)
     const foundPerson=persons.find(person=>person.id===id)
-
-    console.log(foundPerson)
     setSuccessMessage(`Deleted ${foundPerson.name}`)
     setPersons(removedPerson)
     setMessageId(messageId+1)
@@ -53,6 +60,11 @@ const App = () => {
               setNewPhone('')
               setSuccessMessage(`Changed ${foundPerson.name} phone number`)
               setMessageId(messageId+1)
+            })
+            .catch(error=>{
+              handleDeleteError(error.config.url)
+              setNewName('')
+              setNewPhone('')
             })
         )    
       } 
@@ -83,6 +95,10 @@ const App = () => {
         message={successMessage}
         messageId={messageId}
       />
+      <Faulty
+        message={faultyMessage}
+        messageId={messageId}
+      />
       <h2>Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       
@@ -102,6 +118,7 @@ const App = () => {
         persons={persons} 
         filter={filter}
         handleDelete={handleDelete}
+        handleDeleteError={handleDeleteError}
       />
 
     </div>

@@ -3,7 +3,6 @@ const Filter = ({filter,handleFilterChange})=>
         value={filter}
         onChange={handleFilterChange}
       />
-      
   </p>
 
 export default Filter
