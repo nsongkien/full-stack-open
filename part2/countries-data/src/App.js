@@ -22,7 +22,8 @@ const App = () => {
   const [finder,setFinder] = useState('')
   const [finderNames,setFinderNames]=useState([])
   const [selectShow,setSelectShow]=useState('')
-  const api_key=process.env.REACT_APP_API_KEY
+
+
   useEffect(()=>{
     axios
       .get('https://studies.cs.helsinki.fi/restcountries/api/all')
@@ -42,6 +43,8 @@ const App = () => {
     setFinderNames(countriesNames.filter(country=>country.includes(value.toLowerCase())))
   }
   const handleSelectShowButton = (event) => setSelectShow(event.target.value)
+
+
   return(
     <>
       <Finder 
