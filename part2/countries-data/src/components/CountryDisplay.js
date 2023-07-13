@@ -31,12 +31,13 @@ const CountryDisplay = ({selectShow}) => {
                                 pic:`https://openweathermap.org/img/wn/${countryRawData.weather[0].icon}@2x.png`,
                                 windSpeed:countryRawData.wind.speed
                             }
+
                             setCountryWeather(newWeatherObject)
                         })
                 })
         }
     },[selectShow])
-    if(countryData!==null&&selectShow!==''){
+    if(countryData!==null && countryWeather &&selectShow!==''){
         let countryLanguages= Object.values(countryData.languages)
         return (
             <>
@@ -51,7 +52,10 @@ const CountryDisplay = ({selectShow}) => {
                 </ul>
                 <div className='flag'>{countryData.flag}</div>
                 <div>
-
+                    <h2>Weather in {selectShow}</h2>
+                    temperature {Math.round((countryWeather.temp-273.15)*100)/100} Celcius
+                    <img src={countryWeather.pic}></img> <br/>
+                    wind {countryWeather.windSpeed} m/s
                 </div>
             </>
             )
