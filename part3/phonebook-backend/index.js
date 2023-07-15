@@ -1,7 +1,6 @@
 const express = require('express')
 const app=express()
 app.use(express.json())
-
 let persons = [
     { 
       "id": 1,
@@ -56,7 +55,37 @@ app.get('/api/persons/:id',(request,response)=>{
     }
 })
 
+app.post('/api/persons',(request,response)=>{
+    const id=Math.floor(Math.random()*1000)
+    const body=request.body
 
+    if((!body.name)||(!body.number)){
+        console.log(body);
+        return response.status(400).json({
+            error:'content missing'
+        })
+    }
+    else if(persons.find(person=>person.name===body.name)){
+        return response.status(400).json({
+            error:'name must be unique'
+        })
+    }
+    body.id=id
+    persons=persons.concat(body)
+    response.json(body)
+    console.log(`Added ${body.name}`);
+})
+
+app.delete('/api/persons/:id',(request,response)=>{
+    const id=Number(request.params.id)
+    const person=persons.find(person=>person.id===id)
+
+    if (person){
+        persons=persons.filter(p=>p.id!==id)
+        response.status(204).end()
+        console.log('204 Deleted');
+    }
+})
 
 
 const PORT = 3001
