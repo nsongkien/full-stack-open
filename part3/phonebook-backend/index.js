@@ -41,10 +41,7 @@ let persons = [
 ]
 
 app.get('/', (req, res) => {
-    console.log(__dirname)
-    console.log(path.join(__dirname,'..'))
-    const parentDir = path.join(__dirname, '..');
-    res.sendFile(path.resolve(__dirname, 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 })
 
 app.get('/api/persons',(request,response)=>{
