@@ -28,7 +28,7 @@ const App = () => {
   const handlePhoneChange = (event) => setNewPhone(event.target.value)
   const handleDeleteError = (errorUrl)=>{
     console.log([errorUrl])
-    const deletedPerson=persons.find(person=>person.id==errorUrl.slice(errorUrl.indexOf('persons/')+'persons/'.length))
+    const deletedPerson=persons.find(person=>person.id===errorUrl.slice(errorUrl.indexOf('persons/')+'persons/'.length))
     console.log(deletedPerson)
     setFaultyMessagae(`Information for ${deletedPerson.name} was already deleted`)
     setPersons(persons => persons.map((person)=>person).filter((person) => person.name !== deletedPerson.name))

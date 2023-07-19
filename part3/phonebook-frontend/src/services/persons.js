@@ -15,8 +15,10 @@ const update=(id,updateObject)=>{
     return request.then(response=>response.data)
 }
 
-export default {
+const personsServices = {
     create,
     erase,
     update,
 }
+
+export default personsServices
