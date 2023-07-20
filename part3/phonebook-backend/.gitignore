@@ -28,5 +28,3 @@ yarn-error.log*
 fly.toml
 Dockerfile
 .dockerignore
-.eslintrc.js
-.eslintignore
