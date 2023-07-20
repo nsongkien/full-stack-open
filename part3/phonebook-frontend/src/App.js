@@ -61,10 +61,9 @@ const App = () => {
               setSuccessMessage(`Changed ${foundPerson.name} phone number`)
               setMessageId(messageId+1)
             })
-            .catch(error=>{
-              handleDeleteError(error.config.url)
-              setNewName('')
-              setNewPhone('')
+            .catch(error=> {
+              console.log(error.response.data.error)
+              setFaultyMessagae(error.response.data.error)
             })
         )    
       } 
@@ -84,8 +83,10 @@ const App = () => {
         setSuccessMessage(`Added ${newPersonObject.name} phone number`)
         setMessageId(messageId+1)
       })
-    
-    
+      .catch(error=> {
+        console.log(error.response.data.error)
+        setFaultyMessagae(error.response.data.error)
+      })
   }
   
 

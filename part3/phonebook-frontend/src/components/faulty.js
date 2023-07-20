@@ -8,7 +8,7 @@ const Faulty = ({ message }) => {
 
       const timer = setTimeout(() => {
         setVisible(false);
-      }, 2000);
+      }, 4000);
 
       return () => clearTimeout(timer);
     }
