@@ -4,12 +4,13 @@
   "description": "list of favorite blogs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "dev": "nodemon index.js"
   },
   "author": "kien nguyen",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.6.2",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
@@ -18,5 +19,8 @@
     "express": "^4.18.2",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.1"
+  },
+  "jest": {
+    "testEnvironment":"node"
   }
 }
