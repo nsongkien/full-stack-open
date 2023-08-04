@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.6.2",
+    "lodash": "^4.17.21",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
@@ -21,6 +22,6 @@
     "mongoose": "^7.4.1"
   },
   "jest": {
-    "testEnvironment":"node"
+    "testEnvironment": "node"
   }
 }
