@@ -32,9 +32,12 @@ router.put('/:id', async(request,response,next)=>{
         author:body.author,
         likes:body.likes
     }
+    console.log(blog);
 
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id,updatedBlog, ({new:true}))
+
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new:true})
     response.json(updatedBlog)
+    console.log(updatedBlog)
 })
 
 module.exports=router

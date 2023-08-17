@@ -113,8 +113,8 @@ describe('deletion of a blog',()=>{
         const blogsAtStart = await helper.blogsInDb()
         const blogToDelete = blogsAtStart[0]
 
-        api
-            .delete(blogToDelete)
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
             .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
@@ -124,6 +124,25 @@ describe('deletion of a blog',()=>{
         expect(titles).not.toContain(blogToDelete.title)
 
 
+    })
+})
+
+describe('changing one specific blog', ()=>{
+    test('changing title of one blog that exists', async()=>{
+        const blogsAtStart = await helper.blogsInDb()
+        let targetBlog = blogsAtStart[0]
+
+        targetBlog.title='changed title'
+        await api
+            .put(`/api/blogs/${targetBlog.id}`)
+            .send(targetBlog)
+            .expect(200)
+
+        const blogsAtEnd = await helper.blogsInDb()
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+        const title= blogsAtEnd[0].title
+        expect(title).toBe('changed title')
     })
 })
 afterAll(async()=>{
