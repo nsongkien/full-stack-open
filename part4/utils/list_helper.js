@@ -21,8 +21,7 @@ const mostBlogs = (blogs) => {
         .value()
 
         countAuthorBlogs = _.maxBy(countAuthorBlogs,(object)=>(object.blogs))
-
-    console.log(countAuthorBlogs)
+        
     return countAuthorBlogs
 }
 
