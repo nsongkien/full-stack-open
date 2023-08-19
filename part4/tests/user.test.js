@@ -5,78 +5,79 @@ const api = supertest(app)
 const helper = require('./api_test_helper')
 
 const User = require('../models/user')
-const user = require('../models/user')
 const bcrypt = require('bcrypt')
 
 
-describe('when there is initially one user in the DB',()=>{
-    beforeEach(async()=>{
-        await User.deleteMany({})
+describe('when there is initially one user in the DB',() => {
+  beforeEach(async() => {
+    await User.deleteMany({})
 
-        const passwordHash = await bcrypt.hash('this is a password',10)
-        const user = new User({
-            username:'root',
-            name:'Super User',
-            passwordHash
-        })
-
-        await user.save()
+    const passwordHash = await bcrypt.hash('this is a password',10)
+    const user = new User({
+      username:'root',
+      name:'Super User',
+      passwordHash
     })
 
-    test('creation suceeds with a fresh username', async()=>{
-        const usersAtStart = await helper.usersInDb()
+    await user.save()
+  })
 
-        const newUser = {
-            username:'nskien',
-            name:'Kien Nguyen',
-            password:'password'
-        }
+  test('creation suceeds with a fresh username', async() => {
+    const usersAtStart = await helper.usersInDb()
 
-        await api
-            .post('/api/users')
-            .send(newUser)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
+    const newUser = {
+      username:'nskien',
+      name:'Kien Nguyen',
+      password:'password'
+    }
 
-        const usersAtEnd = await helper.usersInDb()
-        expect(usersAtEnd).toHaveLength(usersAtStart.length+1)
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
 
-        const userNames = usersAtEnd.map(user=>user.name)
-        expect(userNames).toContain(newUser.name)
-    })
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length+1)
 
-    test('creation failed with either missing username or password', async()=>{
-        const usersAtStart = await helper.usersInDb()
+    const userNames = usersAtEnd.map(user => user.name)
+    expect(userNames).toContain(newUser.name)
+  })
 
-        const missingUsername = {
-            name:'John Doe',
-            password:'foo'
-        }
+  test('creation failed with either missing username or password', async() => {
+    const usersAtStart = await helper.usersInDb()
 
-        const missingPassword = {
-            username:'foobar',
-            name:'Foo Bar'
-        }
+    const missingUsername = {
+      name:'John Doe',
+      password:'foo'
+    }
 
-        let result = await api
-            .post('/api/users')
-            .send(missingPassword)
-            .expect(400)
-        
-        result = await api
-            .post('/api/users')
-            .send(missingUsername)
-            .expect(400)
+    const missingPassword = {
+      username:'foobar',
+      name:'Foo Bar'
+    }
+
+    let result = await api
+      .post('/api/users')
+      .send(missingPassword)
+      .expect(400)
+
+    result = await api
+      .post('/api/users')
+      .send(missingUsername)
+      .expect(400)
 
 
-        expect(result.body.error)
+    expect(result.body.error)
 
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
-    })
-        
+  })
+
 })
 
 
-afterAll(async()=>{
-    await mongoose.connection.close()
+afterAll(async() => {
+  await mongoose.connection.close()
 })
