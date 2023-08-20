@@ -1,6 +1,6 @@
 # full-stack-open
 
-my attemp to learn MERN... for the second time.
+my second attemp to learn MERN.
 
 # phonebook demo
 
