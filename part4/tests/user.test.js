@@ -12,9 +12,9 @@ describe('when there is initially one user in the DB',() => {
   beforeEach(async() => {
     await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('this is a password',10)
+    const passwordHash = await bcrypt.hash('password',10)
     const user = new User({
-      username:'root',
+      username:'test',
       name:'Super User',
       passwordHash
     })

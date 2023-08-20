@@ -4,6 +4,7 @@ const app = require('../app')
 const api = supertest(app)
 const helper = require('./api_test_helper')
 
+const User = require('../models/user')
 const Blog = require('../models/blog')
 
 beforeEach(async() => {
@@ -13,6 +14,12 @@ beforeEach(async() => {
     .map(blog => new Blog(blog))
 
   const promiseArray = blogObjects.map(blog => blog.save())
+
+  const user = await User.findOne()
+  await Blog.updateMany(
+    {},
+    {$set: {user:user._id}}
+  )
   await Promise.all(promiseArray)
 },100000)
 
@@ -46,8 +53,18 @@ describe('posting a blog', () => {
       likes: 18
     }
 
+    const login = {
+      username:'test',
+      password:'password'
+    }
+
+    const loginResult = await api
+      .post('/api/login')
+      .send(login)
+    
     await api
       .post('/api/blogs')
+      .auth(loginResult.body.token , {type: 'bearer'})
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -66,8 +83,18 @@ describe('posting a blog', () => {
       url:'nskien.xyz'
     }
 
+    const login = {
+      username:'test',
+      password:'password'
+    }
+
+    const loginResult = await api
+      .post('/api/login')
+      .send(login)
+
     await api
       .post('/api/blogs')
+      .auth(loginResult.body.token, {type: 'bearer'})
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -92,13 +119,24 @@ describe('posting a blog', () => {
       likes:2
     }
 
+    const login = {
+      username:'test',
+      password:'password'
+    }
+
+    const loginResult = await api
+      .post('/api/login')
+      .send(login)
+
     await api
       .post('/api/blogs')
+      .auth(loginResult.body.token, {type:'bearer'})
       .send(missingUrlBlog)
       .expect(400)
 
     await api
       .post('/api/blogs')
+      .auth(loginResult.body.token, {type:'bearer'})
       .send(missingTitleBlog)
       .expect(400)
 
@@ -106,6 +144,19 @@ describe('posting a blog', () => {
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 
+  test('return 401 if token is not provided',async()=>{
+    const normalNewBlog = {
+      title:'this blog does not have a token so should not be posted',
+      author:'Kien',
+      url:'example.org',
+      likes:0
+    }
+    await api
+      .post('/api/blogs')
+      .send(normalNewBlog)
+      .expect(401)
+
+  })
 })
 
 describe('deletion of a blog',() => {
@@ -113,8 +164,18 @@ describe('deletion of a blog',() => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
+    const login = {
+      username:'test',
+      password:'password'
+    }
+
+    const loginResult = await api
+      .post('/api/login')
+      .send(login)
+
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .auth(loginResult.body.token, {type:'bearer'})
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -123,7 +184,15 @@ describe('deletion of a blog',() => {
     const titles = blogsAtEnd.map(blog => blog.title)
     expect(titles).not.toContain(blogToDelete.title)
 
+  })
 
+  test('return 401 unauthorized when token is not provided', async()=>{
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api 
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(401)
   })
 })
 
