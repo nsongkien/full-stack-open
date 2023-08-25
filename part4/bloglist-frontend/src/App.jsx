@@ -34,6 +34,7 @@ const App = () => {
   )
 
   const postBlog = async (blogObject) => {
+    const {title,author,url} = blogObject
     const addedBlog = await blogService.create({title, author, url})
     if (addedBlog !== null) {
           setSuccessMessage(`Added: ${addedBlog.title}`)
@@ -120,7 +121,7 @@ const App = () => {
                 <button onClick={handleLogout}>log out</button>
               </p>
 
-              <BlogForm onSubmit={postBlog}/>
+              <BlogForm postBlog={postBlog}/>
 
               
               {renderBlogList()}

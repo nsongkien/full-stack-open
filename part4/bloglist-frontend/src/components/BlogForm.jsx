@@ -1,25 +1,23 @@
 import { useState } from "react"
 
-
-
 const BlogForm = ({postBlog}) => {
     const [title,setTitle]= useState('')
     const [author,setAuthor]=useState('')
     const [url, setUrl] = useState('')
     const [visible, setVisible] = useState(false)
 
-    const showWhenVisibleTrue = {display: visible ? 'none' : ''}
-    const showWhenVisibleFalse = {display: visible ? '' : 'none'}
+    const showWhenVisibleTrue = {display: visible ? '' : 'none'}
+    const showWhenVisibleFalse = {display: visible ? 'none' : ''}
 
     const createBlog = (event) => {
       event.preventDefault()
-      postBlog ({
+      postBlog({
         title: title,
         author: author,
         url: url
       })
       setAuthor('')
-      setTitle('')  
+      setTitle('')
       setUrl('')
     }
 
@@ -62,17 +60,12 @@ const BlogForm = ({postBlog}) => {
                   onChange={({target})=>setUrl(target.value)}
                 />
               </div>
-              <button type='submit'>Post</button>
-              <br />
-              <button onClick={toggleVisibility}>cancel</button>
+              <button type='submit'>Post</button> <br />
             </form>
+            <button onClick={toggleVisibility}> cancel </button>
           </div>
-          
       </>
     )
 }
-    
-    
-    
 
 export default BlogForm
