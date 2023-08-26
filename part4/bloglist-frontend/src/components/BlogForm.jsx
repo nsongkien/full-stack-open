@@ -14,7 +14,7 @@ const BlogForm = ({postBlog}) => {
       postBlog({
         title: title,
         author: author,
-        url: url
+        url: url,
       })
       setAuthor('')
       setTitle('')

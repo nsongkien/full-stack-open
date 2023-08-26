@@ -6,6 +6,7 @@ import SuccessNotification from './components/SuccessNotification'
 import ErrorNotification from './components/ErrorNotification'
 import BlogForm from './components/BlogForm'
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -17,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if(loggedUserJSON){
@@ -27,11 +28,6 @@ const App = () => {
     }
   }, [])
 
-  const renderBlogList = () => (
-    blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-    )
-  )
 
   const postBlog = async (blogObject) => {
     const {title,author,url} = blogObject
@@ -39,7 +35,7 @@ const App = () => {
     if (addedBlog !== null) {
           setSuccessMessage(`Added: ${addedBlog.title}`)
           
-          setBlogs(blogs.concat(addedBlog))
+          setBlogs(await blogService.getAll())
     }
     else setErrorMessage(`Error, blog could not be added`)
 
@@ -100,11 +96,15 @@ const App = () => {
       }, 5000);
     }
   }
-
   const handleLogout = async () => {
     window.localStorage.removeItem('loggedBlogappUser')
     location.reload()
   }
+  const renderBlogList = () => (
+    blogs.map(blog =>
+      <Blog key={blog.id} blog={blog}/>
+    )
+  )
 
   return (
     <div>
