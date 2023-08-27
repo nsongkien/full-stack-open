@@ -6,7 +6,6 @@ import SuccessNotification from './components/SuccessNotification'
 import ErrorNotification from './components/ErrorNotification'
 import BlogForm from './components/BlogForm'
 
-
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -17,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a,b)=> b.likes - a.likes) )
     )
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -100,11 +99,24 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     location.reload()
   }
+  const handleLike = async (likedBlog) => {
+    await blogService.update(likedBlog.id,likedBlog)
+
+    const updatedBlogs = await blogService.getAll()
+    setBlogs(updatedBlogs.sort((a,b)=> b.likes - a.likes))
+  }
+  const handleDelete = async (id) => {
+    await blogService.remove(id)
+    
+    const updatedBlogs = await blogService.getAll()
+    setBlogs(updatedBlogs.sort((a,b)=> b.likes - a.likes))
+  }
   const renderBlogList = () => (
     blogs.map(blog =>
-      <Blog key={blog.id} blog={blog}/>
+      <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete}/>
     )
   )
+
 
   return (
     <div>
