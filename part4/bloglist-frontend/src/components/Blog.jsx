@@ -1,10 +1,11 @@
-import { useState } from "react"
-import blogService from "../services/blogs"
-const Blog = ({ blog , handleLike, handleDelete}) => {
+import { useState } from 'react'
+import blogService from '../services/blogs'
+
+const Blog = ({ blog , handleLike, handleDelete }) => {
   const [visible, setVisible] = useState(false)
 
-  const showWhenVisibleFalse = {display: visible ? 'none' : ''}
-  const showWhenVisibleTrue = {display: visible ? '' : 'none'}
+  const showWhenVisibleFalse = { display: visible ? 'none' : '' }
+  const showWhenVisibleTrue = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -26,7 +27,7 @@ const Blog = ({ blog , handleLike, handleDelete}) => {
     })
   }
 
-  const removeBlog = ()=> {
+  const removeBlog = () => {
     if (window.confirm(`Delete ${blog.title}?`))
       handleDelete(blog.id)
   }
@@ -37,13 +38,13 @@ const Blog = ({ blog , handleLike, handleDelete}) => {
         {blog.title} - {blog.author} <button onClick={toggleVisibility}>view</button>
       </div>
       <div style={showWhenVisibleTrue}>
-        {blog.title} - {blog.author}  
+        {blog.title} - {blog.author}
         <button onClick={toggleVisibility}>hide</button> <br />
         {<a href={blog.url}>{blog.url}</a>} <br />
         {blog.likes} <button onClick={increasedLikeBlog}>like</button> <br />
-        {uploadedUser} 
+        {uploadedUser}
         {window.localStorage.getItem('loggedBlogappUser').token === blogService.token
-          && <button className="removeButton" onClick={removeBlog}>remove</button>  
+          && <button className="removeButton" onClick={removeBlog}>remove</button>
         }
       </div>
     </div>

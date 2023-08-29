@@ -16,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a,b)=> b.likes - a.likes) )
+      setBlogs( blogs.sort((a,b) => b.likes - a.likes) )
     )
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -29,56 +29,56 @@ const App = () => {
 
 
   const postBlog = async (blogObject) => {
-    const {title,author,url} = blogObject
-    const addedBlog = await blogService.create({title, author, url})
+    const { title,author,url } = blogObject
+    const addedBlog = await blogService.create({ title, author, url })
     if (addedBlog !== null) {
-          setSuccessMessage(`Added: ${addedBlog.title}`)
-          
-          setBlogs(await blogService.getAll())
+      setSuccessMessage(`Added: ${addedBlog.title}`)
+
+      setBlogs(await blogService.getAll())
     }
-    else setErrorMessage(`Error, blog could not be added`)
+    else setErrorMessage('Error, blog could not be added')
 
     setTimeout(() => {
       setSuccessMessage(null)
       setErrorMessage(null)
-    }, 5000);
+    }, 5000)
   }
 
-  const loginForm = ()=> (
+  const loginForm = () => (
     <>
     Log into your account
-    <form onSubmit={handleLogin}>
-      <div>
+      <form onSubmit={handleLogin}>
+        <div>
         username
-        <input 
-          type="text" 
-          value={username}
-          name="Username"
-          onChange={({target})=> setUsername(target.value)}
-        />
-      </div>
-      <div>
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
         password
-        <input 
-          type="password" 
-          value={password}
-          name='Password'
-          onChange={({target})=> setPassword(target.value)}
-        />
-      </div>
-      <button type='submit'>Log in</button>
-    </form>
-    </> 
+          <input
+            type="password"
+            value={password}
+            name='Password'
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type='submit'>Log in</button>
+      </form>
+    </>
   )
 
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
-      const user = await loginService.login({username,password})
+      const user = await loginService.login({ username,password })
       blogService.setToken(user.token)
-      
+
       setUser(user)
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
@@ -92,7 +92,7 @@ const App = () => {
       console.log('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000);
+      }, 5000)
     }
   }
   const handleLogout = async () => {
@@ -103,13 +103,13 @@ const App = () => {
     await blogService.update(likedBlog.id,likedBlog)
 
     const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs.sort((a,b)=> b.likes - a.likes))
+    setBlogs(updatedBlogs.sort((a,b) => b.likes - a.likes))
   }
   const handleDelete = async (id) => {
     await blogService.remove(id)
-    
+
     const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs.sort((a,b)=> b.likes - a.likes))
+    setBlogs(updatedBlogs.sort((a,b) => b.likes - a.likes))
   }
   const renderBlogList = () => (
     blogs.map(blog =>
@@ -128,19 +128,19 @@ const App = () => {
         !user
           ? loginForm()
           : <div>
-              <p>
-                {user.name} logged in
-                <button onClick={handleLogout}>log out</button>
-              </p>
+            <p>
+              {user.name} logged in
+              <button onClick={handleLogout}>log out</button>
+            </p>
 
-              <BlogForm postBlog={postBlog}/>
+            <BlogForm postBlog={postBlog}/>
 
-              
-              {renderBlogList()}
-              
-            </div>
-              
-            
+
+            {renderBlogList()}
+
+          </div>
+
+
       }
 
     </div>
