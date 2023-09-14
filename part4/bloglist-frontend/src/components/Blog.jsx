@@ -34,10 +34,10 @@ const Blog = ({ blog , handleLike, handleDelete }) => {
 
   return (
     <div className="blog" >
-      <div style={showWhenVisibleFalse}>
+      <div className='view-close' style={showWhenVisibleFalse}>
         {blog.title} - {blog.author} <button onClick={toggleVisibility}>view</button>
       </div>
-      <div style={showWhenVisibleTrue}>
+      <div className='view-open' style={showWhenVisibleTrue}>
         {blog.title} - {blog.author}
         <button onClick={toggleVisibility}>hide</button> <br />
         {<a href={blog.url}>{blog.url}</a>} <br />
