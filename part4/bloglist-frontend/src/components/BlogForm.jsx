@@ -36,33 +36,36 @@ const BlogForm = ({ postBlog }) => {
             Create A Post:
         <form onSubmit={createBlog}>
           <div>
-                Title:
+            <label htmlFor="title-field">Title:</label>
             <input
               type="text"
               value={title}
               name="Title"
+              id='title-field'
               onChange={({ target }) => setTitle(target.value)}
             />
           </div>
           <div>
-                Author:
+            <label htmlFor="author-field">Author:</label>
             <input
               type="text"
               value={author}
               name='Author'
+              id='author-field'
               onChange={({ target }) => setAuthor(target.value)}
             />
           </div>
           <div>
-                Url:
+            <label htmlFor="url-field">Url:</label>
             <input
               type="text"
               value={url}
               name='Url'
+              id='url-field'
               onChange={({ target }) => setUrl(target.value)}
             />
           </div>
-          <button type='submit'>Post</button> <br />
+          <button className='post-button' type='submit'>Post</button> <br />
         </form>
         <button onClick={toggleVisibility}> cancel </button>
       </div>
