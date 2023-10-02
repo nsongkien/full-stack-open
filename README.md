@@ -11,5 +11,5 @@ https://kien-blogapp.fly.dev/
 https://phonebook-nskien.fly.dev/
 
 guess account:
-usr: mickey, pass: password
+usr = mickey, pass = password
 
