@@ -4,17 +4,19 @@
   "description": "list of favorite blogs",
   "main": "index.js",
   "scripts": {
-    "start":"cross-env NODE_ENV=production node index.js",
+    "start": "NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "dev": "cross-env NODE_ENV=test nodemon index.js",
     "lint": "eslint .",
-    "start:test":"cross-env NODE_ENV=test nodemon index.js",
-    "build:ui": "rm -rf build && cd ../bloglist-frontend/ && npm run build && cp -r dist ../bloglist-backend",
-    "deploy:full": "npm run build:ui && npm run deploy"
+    "start:test": "cross-env NODE_ENV=test nodemon index.js",
+    "build:ui": "rm -rf dist && cd ../bloglist-frontend/ && npm run build && cp -r dist ../bloglist-backend",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "deploy": "fly deploy"
   },
   "author": "kien nguyen",
   "license": "ISC",
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.10",
     "cross-env": "^7.0.3",
     "eslint": "^8.47.0",
     "eslint-plugin-react": "^7.33.2",

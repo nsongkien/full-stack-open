@@ -9,6 +9,7 @@ const userRouter = require('./controllers/user')
 const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
 
+mongoose.set('strictQuery',false)
 mongoose.connect(config.MONGODB_URI)
 
 app.use(cors())
