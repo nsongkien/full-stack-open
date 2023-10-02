@@ -30,7 +30,7 @@ const BlogForm = ({ postBlog }) => {
   return (
     <>
       <div style={showWhenVisibleFalse}>
-        <button onClick={toggleVisibility}>create blog</button>
+        <button id='createButton' onClick={toggleVisibility}>create blog</button>
       </div>
       <div style={showWhenVisibleTrue}>
             Create A Post:
