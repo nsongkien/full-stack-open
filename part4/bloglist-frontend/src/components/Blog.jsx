@@ -40,7 +40,7 @@ const Blog = ({ blog , handleLike, handleDelete }) => {
       <div className='view-open' style={showWhenVisibleTrue}>
         {blog.title} - {blog.author}
         <button onClick={toggleVisibility}>hide</button> <br />
-        {<a target='_blank' href={new URL(blog.url).href}>{new URL(blog.url).href}</a>} <br />
+        {blog.url} <br />
         {blog.likes} <button onClick={increasedLikeBlog}>like</button> <br />
         {uploadedUser}
         {window.localStorage.getItem('loggedBlogappUser').token === blogService.token
